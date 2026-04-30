@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "AI Website Co-Pilot",
+  "description": "Select text on any page and explain or summarize it in a slide-in reader panel.",
+  "version": "1.0.0",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://integrate.api.nvidia.com/*"
+  ],
+  "action": {
+    "default_title": "AI Website Co-Pilot"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

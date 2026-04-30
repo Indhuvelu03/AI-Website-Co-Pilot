@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const { text = "", action = "explain" } = await request.json();
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey =
+    process.env.NVIDIA_API_KEY || process.env.GEMINI_API_KEY;
+  const model =
+    process.env.NVIDIA_MODEL || "meta/llama-3.1-8b-instruct";
 
   const safeText = text.trim();
 
@@ -15,7 +18,10 @@ export async function POST(request) {
 
   if (!apiKey) {
     return NextResponse.json(
-      { error: "Missing GEMINI_API_KEY in .env.local." },
+      {
+        error:
+          "Missing NVIDIA_API_KEY in .env.local. If you still have the older GEMINI_API_KEY line, that works too for now.",
+      },
       { status: 500 }
     );
   }
@@ -26,48 +32,50 @@ export async function POST(request) {
       : "Explain the following text in simple, clear language for a general reader.";
 
   try {
-    const geminiResponse = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+    const nvidiaResponse = await fetch(
+      "https://integrate.api.nvidia.com/v1/chat/completions",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": apiKey,
+          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          contents: [
+          model,
+          temperature: action === "summarize" ? 0.2 : 0.4,
+          max_tokens: 400,
+          messages: [
             {
-              parts: [
-                {
-                  text: `${instruction}\n\nText:\n${safeText}`,
-                },
-              ],
+              role: "system",
+              content:
+                "You are a concise reading assistant. Give direct, helpful answers with no preamble.",
+            },
+            {
+              role: "user",
+              content: `${instruction}\n\nText:\n${safeText}`,
             },
           ],
         }),
       }
     );
 
-    const data = await geminiResponse.json();
+    const data = await nvidiaResponse.json();
 
-    if (!geminiResponse.ok) {
+    if (!nvidiaResponse.ok) {
       const message =
-        data?.error?.message || "Gemini request failed. Please try again.";
+        data?.error?.message || "NVIDIA request failed. Please try again.";
 
       return NextResponse.json({ error: message }, { status: 500 });
     }
 
     const response =
-      data?.candidates?.[0]?.content?.parts
-        ?.map((part) => part.text)
-        .filter(Boolean)
-        .join("\n")
-        .trim() || "No response generated.";
+      data?.choices?.[0]?.message?.content?.trim() ||
+      "No response generated.";
 
     return NextResponse.json({ response });
   } catch (error) {
     return NextResponse.json(
-      { error: "Unable to reach Gemini right now. Please try again." },
+      { error: "Unable to reach NVIDIA right now. Please try again." },
       { status: 500 }
     );
   }

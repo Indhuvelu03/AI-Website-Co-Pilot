@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Website Co-Pilot Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="settings-shell">
+      <section class="settings-card">
+        <p class="eyebrow">AI Website Co-Pilot</p>
+        <h1>Extension Settings</h1>
+        <p class="intro">
+          Add your NVIDIA API key once and the extension can explain or summarize
+          selected text on any page.
+        </p>
+
+        <form id="settings-form" class="settings-form">
+          <label class="field">
+            <span>NVIDIA API Key</span>
+            <input
+              id="api-key"
+              name="api-key"
+              type="password"
+              placeholder="Paste your NVIDIA API key"
+              autocomplete="off"
+            />
+          </label>
+
+          <label class="field">
+            <span>Model</span>
+            <input
+              id="model"
+              name="model"
+              type="text"
+              value="meta/llama-3.1-8b-instruct"
+            />
+          </label>
+
+          <div class="actions">
+            <button type="submit">Save Settings</button>
+            <p id="status" class="status"></p>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="options.js"></script>
+  </body>
+</html>

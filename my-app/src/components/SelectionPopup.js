@@ -17,19 +17,19 @@ export default function SelectionPopup({
         left: position.left,
         transform: "translateX(-50%)",
       }}
-      className="absolute z-40 flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl shadow-black/40 backdrop-blur"
+      className="absolute z-40 flex items-center gap-1.5 rounded-full border border-stone-900/10 bg-[#201b18] p-1.5 shadow-[0_18px_30px_rgba(31,19,11,0.28)] backdrop-blur"
     >
       <button
         type="button"
         onClick={onExplain}
-        className="rounded-xl bg-white/8 px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/14"
+        className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-stone-950 transition hover:bg-stone-100"
       >
         Explain
       </button>
       <button
         type="button"
         onClick={onSummarize}
-        className="rounded-xl bg-cyan-400/14 px-3 py-2 text-sm font-medium text-cyan-200 transition hover:bg-cyan-400/22"
+        className="rounded-full bg-gradient-to-r from-amber-300 to-orange-400 px-4 py-2 text-sm font-semibold text-stone-950 transition hover:brightness-105"
       >
         Summarize
       </button>
