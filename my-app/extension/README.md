@@ -14,9 +14,7 @@ This extension is now standalone.
 1. Open `chrome://extensions`
 2. Turn on **Developer mode**
 3. Click **Load unpacked**
-4. Select this folder:
-
-`C:\Users\INDHU\Music\AI-Website-Co-Pilot\my-app\extension`
+4. Select the `my-app/extension` folder from this repository.
 
 ## Configure it
 

@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Website Co-Pilot App
 
-## Getting Started
+This folder contains the Next.js demo app and the standalone Chrome extension for AI Website Co-Pilot.
 
-First, run the development server:
+AI Website Co-Pilot lets a user select text, then ask AI to explain it clearly or summarize it in a few concise sentences. The Next.js app demonstrates the interaction on a custom reading surface. The extension brings the same behavior to regular web pages.
+
+## Stack
+
+- Next.js 16
+- React 19
+- Tailwind CSS 4
+- NVIDIA chat completions API
+- Chrome Extension Manifest V3
+
+## Setup
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create `.env.local`:
+
+```env
+NVIDIA_API_KEY=your_api_key_here
+NVIDIA_MODEL=meta/llama-3.1-8b-instruct
+```
+
+`NVIDIA_MODEL` is optional. The default model is `meta/llama-3.1-8b-instruct`.
+
+## Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`, select any sentence in the demo article, then choose Explain or Summarize.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Chrome Extension
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The extension lives in `extension` and does not require the Next.js app to be running.
 
-## Learn More
+To load it:
 
-To learn more about Next.js, take a look at the following resources:
+1. Open `chrome://extensions`.
+2. Enable Developer mode.
+3. Click Load unpacked.
+4. Select this folder: `my-app/extension`.
+5. Open the extension options page.
+6. Add your NVIDIA API key and save.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev      # Start the development server
+npm run build    # Build for production
+npm run start    # Start the production server
+npm run lint     # Run ESLint
+```
 
-## Deploy on Vercel
+## Key Files
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `src/app/page.js` - demo reading surface and selection workflow
+- `src/app/api/ai/route.js` - Next.js API route for AI requests
+- `src/components/SelectionPopup.js` - Explain and Summarize popup
+- `src/components/Sidebar.js` - AI response panel
+- `src/store/useCopilotStore.js` - small client-side store
+- `extension/background.js` - extension AI request handler
+- `extension/content.js` - page selection and overlay logic
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+
+- The app prefers `NVIDIA_API_KEY`, with `GEMINI_API_KEY` still accepted as a fallback.
+- The extension stores its API key with `chrome.storage.local`.
+- Both app and extension use `meta/llama-3.1-8b-instruct` unless another model is configured.
